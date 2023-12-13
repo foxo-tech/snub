@@ -360,7 +360,11 @@ module.exports = function Snub(config = {}) {
       );
       if (intercept === false) return;
 
-      e.method(data.contents, replyMethod, channel, e.pattern);
+      if (config.wrapper) {
+        config.wrapper(e.method)(data.contents, replyMethod, channel, e.pattern);
+      } else {
+        e.method(data.contents, replyMethod, channel, e.pattern);
+      }
       if (!replyMethod)
         stat({
           pattern: e.pattern,
